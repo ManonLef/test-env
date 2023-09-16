@@ -1,21 +1,22 @@
-import { describe, it, expect } from "vitest";
+/* eslint-disable no-undef */
 import { render, screen } from "@testing-library/react";
+import { userEvent } from "@testing-library/user-event";
 import App from "./App";
 
-describe("something truthy and falsy", () => {
-  it("true to be true", () => {
-    expect(true).toBe(true);
+describe("App component", () => {
+  it("renders magnificent monkeys", () => {
+    const { container } = render(<App />);
+    expect(container).toMatchSnapshot(); // after adding this line, the snapshot automagically appeared <3
   });
 
-  it("false to be false", () => {
-    expect(false).toBe(false);
-  });
-});
+  it("renders radical rhinos after button click", async () => {
+    const user = userEvent.setup();
 
-describe("App", () => {
-  it("renders headline", () => {
-    render(<App title="React" />);
+    render(<App />);
+    const button = screen.getByRole("button", { name: "Click Me" });
 
-    screen.debug();
+    await user.click(button);
+
+    expect(screen.getByRole("heading").textContent).toMatch(/radical rhinos/i);
   });
 });
